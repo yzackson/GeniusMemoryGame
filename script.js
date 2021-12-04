@@ -1,59 +1,64 @@
-let colorOrder = [];
-let clickedOrder = [];
 let score = 0;
 let level = 1;
+let userOrder = [];
+let systemOrder = [];
 
-// 0 - blue
-// 1 - green
-// 2 - red
-// 3 - yellow
-
+//colors
 const blue = document.querySelector('.blue');
 const green = document.querySelector('.green');
 const red = document.querySelector('.red');
-const yellow = document.querySelector('.yellow');
+const orange = document.querySelector('.orange');
 
-let generateOrder = () => {
-    colorOrder.push(Math.floor(Math.random() * 4));
-    //debugger;
-    console.log(colorOrder);
-    clickedOrder = [];
-    
-    for(let i = 0; i <= colorOrder.length; i++) {
-        //debugger;
-        selectColor(colorOrder[i]);
+function startGame() {
+    confirm('Bem vindo ao melhor jogo de memória!\n\nVamos começar?');
+    genSystemOrder();
+}
+
+function genSystemOrder() {
+    systemOrder[systemOrder.length] = Math.floor(Math.random() * 4);
+    userOrder = [];
+    console.log(systemOrder);
+    console.log(systemOrder[systemOrder.length-1]);
+    let element = colors(systemOrder[systemOrder.length-1]);
+    blinkColor(element);
+}
+
+function blinkColor(color) {
+    color.classList.add('selected');
+    setTimeout(() => {
+        color.classList.remove('selected');
+    }, 500);
+}
+
+function blinkColorClick(color) {
+    color.classList.add('selected');
+    setTimeout(() => {
+        color.classList.remove('selected');
+    }, 50);
+}
+
+function click(element) {
+    userOrder[userOrder.length] = element;
+    let color = colors(element);
+    //blinkColorClick(color);
+
+    if (userOrder.length == systemOrder.length){
+        checkOrder();
     }
-};
-
-let selectColor = (element) => {
-    setTimeout(() => {
-        pickcolor(element).classList.add('selected');
-    });
-    setTimeout(() => {
-        pickcolor(element).classList.remove('selected');
-    }, 1000);
 }
 
-let click = (element) => {
-    clickedOrder[clickedOrder.length] = element;
-    
-    pickcolor(element).classList.add('selected');
-    setTimeout(() => {
-        pickcolor(element).classList.remove('selected');
-    }, 1000);
-
-    checkOrder();
-}
-
-let checkOrder = () => {
-    for (i in colorOrder) {
-        if (clickedOrder[i] != colorOrder[i]) {
-            return alert('Cê perdeu!');
+function checkOrder(user, system) {
+    for (let i in systemOrder) {
+        if (userOrder[i] != systemOrder[i]) {
+            gameOver();
+            return 0;
         }
+        score++;
     }
+    nextLevel();
 }
 
-let pickcolor = (element) => {
+let colors = (element) => {
     switch (element) {
         case 0:
             return blue;
@@ -62,21 +67,46 @@ let pickcolor = (element) => {
         case 2:
             return red;
         case 3:
-            return yellow;
+            return orange;
     }
 }
 
-let resetGame = () => {
-    colorOrder = [];
+let nextLevel = () => {
+    //score++;
+    level++;
+    alert(`Parabéns! Você passou o nível ${level}`);
+    genSystemOrder();
+    document.querySelector('.pointsCount').innerHTML = `${score}`;
+}
+
+let gameOver = () => {
+    alert(`Não foi desta vez... \n\nVocê chegou até o nível ${level} e sua pontuação foi de ${score}`);
+    justReset();
+    startGame();
+}
+
+let reset = () => {
     score = 0;
     level = 1;
+    userOrder = [];
+    systemOrder = [];
+
+    startGame();
 }
 
-let starGame = () => {
-    generateOrder();
+let justReset = () => {
+    score = 0;
+    level = 1;
+    userOrder = [];
+    systemOrder = [];
 }
 
-let nextLevel = () => {
-    score++;
-    generateOrder();
-}
+let incrementLevel = () => { level++ }
+let incrementScore = () => { score++ }
+
+blue.onclick = () => { click(0) }
+green.onclick = () => { click(1) }
+red.onclick = () => { click(2) }
+orange.onclick = () => { click(3) }
+
+startGame();

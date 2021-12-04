@@ -15,31 +15,31 @@ body {
     display: grid;
     grid-template-areas: 'blue green' 'yellow red';
     grid-gap: 5px;
-    width: 50%;
-    height: 50%;
+    width: 500px;
+    height: 500px;
     background-color: white;
     border: 1px solid white;
-    border-radius: 30%;
+    border-radius: 100%;
 }
 
 .blue {
     background-color: blue;
-    border-top-left-radius: 60%;
+    border-top-left-radius: 100%;
 }
 
 .green {
     background-color: green;
-    border-bottom-left-radius: 60%;
+    border-bottom-left-radius: 100%;
 }
 
-.yellow {
-    background-color: yellow;
-    border-top-right-radius: 60%;
+.orange {
+    background-color: orange;
+    border-top-right-radius: 100%;
 }
 
 .red {
     background-color: red;
-    border-bottom-right-radius: 60%;
+    border-bottom-right-radius: 100%;
 }
 
 table, td, tr {
